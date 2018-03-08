@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "928876936266",
+    "firebase_url": "https://mytraildemo.firebaseio.com",
+    "project_id": "mytraildemo",
+    "storage_bucket": "mytraildemo.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:928876936266:android:f124c2f2554d6e15",
+        "android_client_info": {
+          "package_name": "com.example.wangzuxiu.traildemo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "928876936266-6hur7q0eaklcsrp8jpht1mbg48ip4bh3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.wangzuxiu.traildemo",
+            "certificate_hash": "73e701b38857ce4ff728d00e1e9dece0221a402b"
+          }
+        },
+        {
+          "client_id": "928876936266-86lmh0euk3sarkbjom876ao7j6vbjcv4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC1S33Tn0WFTSUIz_Xn4UQKcCi6bYwIZJk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "928876936266-86lmh0euk3sarkbjom876ao7j6vbjcv4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

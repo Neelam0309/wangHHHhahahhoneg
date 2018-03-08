@@ -1,0 +1,36 @@
+<resources>
+    <string name="app_name">MyTrails</string>
+    <string name="title_trail_list">Learning Trail List</string>
+    <string name="title_station_list">Trail Station List</string>
+    <string name="title_new_trail">New Learning Trail</string>
+    <string name="title_new_station">New Trail Station</string>
+    <string name="title_new_item">New Contributed Item</string>
+    <string name="empty_trail_list">Create your first learning trail\n to appear here!</string>
+    <string name="empty_station_list">Add your first trail station\n to appear here!</string>
+    <string name="empty_trail_list_participant">Add your first learning trail\n to appear here!</string>
+    <string name="empty_item_list_participant">No one have uploaded yet\n Be the first one!</string>
+    <string name="empty_station_instruction">Task 1: Go there ...</string>
+    <string name="empty_description">What I thought is ..</string>
+    <string name="save">Save</string>
+    <string name="trail_name">Learning Trail Name</string>
+    <string name="trail_date">Learning Trail Date</string>
+    <string name="trail_id">Learning Trail ID</string>
+    <string name="trail_id_with_colon">Learning Trail ID: </string>
+    <string name="station_name">Trail Station Name</string>
+    <string name="station_location">Location</string>
+    <string name="station_instruction">Instruction</string>
+    <string name="file">File (photo/audio/pdf/doc)</string>
+    <string name="file_name_sample">My thought.doc</string>
+    <string name="choose_file">Choose file</string>
+    <string name="description">Description</string>
+    <string name="tab_info">Info</string>
+    <string name="tab_discussions">Discussions</string>
+    <string name="tab_updates">Updates</string>
+    <string name="upload">Upload</string>
+    <string name="menu_log_out">Log out</string>
+    <string name="menu_edit">Edit</string>
+
+    <string name="trail_list">Trail List</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

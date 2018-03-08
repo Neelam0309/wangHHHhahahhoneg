@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    android:background="@drawable/bg_rectangle">
+
+    <TextView
+        android:id="@+id/tv_discussion_topic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:text="Welcome to ISS"
+        android:textColor="@color/colorAccent"
+        android:textSize="20sp"
+        android:textStyle="normal|bold" />
+
+    <TextView
+        android:id="@+id/tv_user_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_discussion_topic"
+        android:layout_marginBottom="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:text="Trainer1"
+        android:textColor="@color/common_google_signin_btn_text_dark_focused" />
+
+    <Space
+        android:id="@+id/v_space"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_discussion_topic"
+        android:layout_toEndOf="@+id/tv_user_name"
+        android:layout_toStartOf="@+id/tv_created_date" />
+
+    <TextView
+        android:id="@+id/tv_created_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/tv_user_name"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/tv_discussion_topic"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"
+        android:text="01/03/2018" />
+</RelativeLayout>

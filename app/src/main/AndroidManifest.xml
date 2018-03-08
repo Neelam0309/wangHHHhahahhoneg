@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.wangzuxiu.traildemo">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".Activity.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".Activity.SelectModeActivity"></activity>
+        <activity android:name=".Activity.StationPostActivity"></activity>
+        <activity android:name=".Activity.InputTrailIdActivity"></activity>
+        <activity android:name=".Activity.BaseActivity"></activity>
+        <activity android:name=".Activity.TrailListActivity"></activity>
+        <activity android:name=".Activity.AddNewTrailActivity"></activity>
+        <activity android:name=".Activity.StationListActivity"></activity>
+        <activity android:name=".Activity.AddNewStationActivity"></activity>
+        <activity android:name=".Activity.AddNewItemActivity"></activity>
+        <activity android:name=".Activity.StationDetailActivity"></activity>
+    </application>
+
+</manifest>

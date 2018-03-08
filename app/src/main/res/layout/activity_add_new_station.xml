@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.wangzuxiu.traildemo.Activity.MainActivity">
+
+
+    <RelativeLayout
+        android:id="@+id/station_info"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_margin="30dp">
+
+        <TextView
+            android:id="@+id/tv_station_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/station_name" />
+
+        <EditText
+            android:id="@+id/et_station_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_station_name"
+            android:layout_marginBottom="20dp"
+            android:hint="@string/station_name"
+            android:inputType="text|textCapWords" />
+
+        <TextView
+            android:id="@+id/tv_station_location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/et_station_name"
+            android:layout_marginBottom="20dp"
+            android:text="@string/station_location" />
+
+        <EditText
+            android:id="@+id/tv_station_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_station_location"
+            android:layout_marginBottom="20dp"
+            android:hint="ISS, NUS, Singapore, 119605" />
+
+        <com.google.android.gms.maps.MapView
+            android:id="@+id/mv_station_location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_station_address"
+            android:layout_marginBottom="20dp" />
+
+        <TextView
+            android:id="@+id/tv_station_instruction"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/mv_station_location"
+            android:text="@string/station_instruction" />
+
+        <EditText
+            android:id="@+id/et_station_instruction"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_station_instruction"
+            android:layout_marginBottom="20dp"
+            android:gravity="top|center_vertical"
+            android:hint="Task 1: Go there ..."
+            android:inputType="textMultiLine"
+            android:minLines="5" />
+
+        <Space
+            android:id="@+id/v_space"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/et_station_instruction"
+            android:layout_above="@+id/btn_save"/>
+
+        <Button
+            android:id="@+id/btn_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:text="@string/save" />
+
+    </RelativeLayout>
+
+</RelativeLayout>
