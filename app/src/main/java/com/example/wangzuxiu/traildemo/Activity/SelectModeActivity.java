@@ -16,6 +16,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.wangzuxiu.traildemo.R;
+import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -74,6 +75,7 @@ public class SelectModeActivity extends AppCompatActivity implements View.OnClic
         FirebaseUser user = mAuth.getCurrentUser();
         tv=findViewById(R.id.user);
         tv.setText("welcome,"+user.getDisplayName());
+        Log.i("tag",user.getUid());
 
 
 
@@ -96,7 +98,7 @@ public class SelectModeActivity extends AppCompatActivity implements View.OnClic
                 .requestEmail()
                 .build();
         mAuth.signOut();
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);  //google log out
         // Google sign out
         mGoogleSignInClient.signOut().addOnCompleteListener(this,
                 new OnCompleteListener<Void>() {
@@ -105,6 +107,10 @@ public class SelectModeActivity extends AppCompatActivity implements View.OnClic
                         startActivity(new Intent(SelectModeActivity.this, MainActivity.class));
                     }
                 });
+
+        LoginManager.getInstance().logOut();  //facebook log out
+
+        startActivity(new Intent(SelectModeActivity.this, MainActivity.class));
     }
 
     @Override
