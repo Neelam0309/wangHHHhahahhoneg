@@ -25,6 +25,7 @@ public class AddNewStationActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // save the new station
                 // ...
+
                 finish();
             }
         });

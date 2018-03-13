@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.example.wangzuxiu.traildemo.R;
+import com.example.wangzuxiu.traildemo.model.User;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -29,13 +30,17 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.Map;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener{
     private static final int RC_SIGN_IN = 9001;
 
     // [START declare_auth]
     private FirebaseAuth mAuth;
-
+    private DatabaseReference ref;
 
     // [END declare_auth]
 
@@ -159,6 +164,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("tag", "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+
+                            ref= FirebaseDatabase.getInstance().getReference("users");
+
+                            User user1=new User(user.getDisplayName(),user.getEmail());
+                            ref.child(user.getUid()).setValue(user1);
+
                             Intent i=new Intent(MainActivity.this,SelectModeActivity.class);
                             startActivity(i);
                             finish();
@@ -195,7 +206,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             startActivity(new Intent(MainActivity.this,SelectModeActivity.class));
-                            //updateUI(user);
+
+                            ref= FirebaseDatabase.getInstance().getReference("users");
+
+                            User user1=new User(user.getDisplayName(),user.getEmail());
+                            ref.child(user.getUid()).setValue(user1);
+
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());

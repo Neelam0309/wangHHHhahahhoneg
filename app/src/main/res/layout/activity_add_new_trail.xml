@@ -44,30 +44,13 @@
             android:layout_below="@+id/tv_trail_date"
             android:layout_marginBottom="20dp"
             android:hint="2018-03-05"
-            android:inputType="date" />
-
-        <TextView
-            android:id="@+id/tv_trail_id"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/et_trail_date"
-            android:text="@string/trail_id" />
-
-        <EditText
-            android:id="@+id/et_trail_id"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/tv_trail_id"
-            android:layout_marginBottom="20dp"
-            android:hint="20180305-ISS"
-            android:inputType="textCapCharacters" />
+            android:inputType="none" />
 
         <Space
             android:id="@+id/v_space"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/et_trail_id"
-            android:layout_above="@+id/btn_save"/>
+            android:layout_above="@+id/btn_save" />
 
         <Button
             android:id="@+id/btn_save"
