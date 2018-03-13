@@ -72,11 +72,7 @@ public class TrailListActivity extends AppCompatActivity{
                 ArrayList <Trail> trailList=new ArrayList<Trail>();
                 for(DataSnapshot child:dataSnapshot.child(uid).getChildren()){
                     Trail trail=child.getValue(Trail.class);
-
-//                    String key=child.getKey();
                     trailList.add(trail);
-                    //Log.i("tag",trail.trailDate);
-                    //System.out.print(trailList.size());
                 }
                 trailListAdapter = new TrailListAdapter(trailList,false);
                 rvTrailList.setAdapter(trailListAdapter);
@@ -126,8 +122,6 @@ public class TrailListActivity extends AppCompatActivity{
             signOut();
 
         } else if (i == R.id.action_edit) {
-//            trailListAdapter.setEditable();
-//            trailListAdapter.notifyDataSetChanged();
 
             mDatabase = FirebaseDatabase.getInstance().getReference("trainer-trails");
 
@@ -137,11 +131,7 @@ public class TrailListActivity extends AppCompatActivity{
                     ArrayList<Trail> trailList = new ArrayList<Trail>();
                     for (DataSnapshot child : dataSnapshot.child(uid).getChildren()) {
                         Trail trail = child.getValue(Trail.class);
-
-//                    String key=child.getKey();
                         trailList.add(trail);
-                        //Log.i("tag",trail.trailDate);
-                        //System.out.print(trailList.size());
                     }
                     trailListAdapter = new TrailListAdapter(trailList, true);
                     rvTrailList.setAdapter(trailListAdapter);

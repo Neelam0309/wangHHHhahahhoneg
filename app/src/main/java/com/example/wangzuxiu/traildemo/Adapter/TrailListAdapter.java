@@ -65,42 +65,19 @@ public class TrailListAdapter extends RecyclerView.Adapter<TrailListAdapter.View
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_trail_list, parent, false);
 
-
-
-
         ViewHolder holder= new ViewHolder(v, editable);
         if (! editable) {
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     // Launch StationListActivity
+                    final Context context = v.getContext();
                     Intent intent = new Intent(context, StationListActivity.class);;
                     context.startActivity(intent);
                 }
             });
         }
-//        else if (editable){
-//            ImageButton btnDeleteTrail = (ImageButton) v.findViewById(R.id.btn_delete_trail);
-//            btnDeleteTrail.setVisibility(View.VISIBLE);
-//
-//            btnDeleteTrail.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    alert(context);
-//                }
-//            });
-//
-//
-//            v.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    // Launch EditTrailActivity, can be revised title and setAutoFilled from AddNewTrailActivity (not implemented yet)
-//                    Context context = v.getContext();
-//                    Intent intent = new Intent(context, AddNewTrailActivity.class);;
-//                    context.startActivity(intent);
-//                }
-//            });
-//        }
+
 
         return holder;
     }
