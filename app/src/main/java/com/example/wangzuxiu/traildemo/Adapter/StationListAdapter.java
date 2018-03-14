@@ -1,9 +1,13 @@
 package com.example.wangzuxiu.traildemo.Adapter;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.os.Build;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +18,19 @@ import android.widget.Toast;
 
 import com.example.wangzuxiu.traildemo.Activity.AddNewStationActivity;
 import com.example.wangzuxiu.traildemo.Activity.StationDetailActivity;
+import com.example.wangzuxiu.traildemo.Activity.StationListActivity;
 import com.example.wangzuxiu.traildemo.R;
+import com.example.wangzuxiu.traildemo.model.Station;
+import com.example.wangzuxiu.traildemo.model.Trail;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 
 /**
  * Created by mia on 04/03/18.
@@ -23,8 +39,10 @@ import com.example.wangzuxiu.traildemo.R;
 
 public class StationListAdapter extends RecyclerView.Adapter<StationListAdapter.ViewHolder>  {
 
-    private String[] myDataSet;
+    private ArrayList<Station> myDataSet=new ArrayList<>();
     private boolean editable;
+    private ImageButton btnDeleteStation;
+    private String key;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
@@ -33,7 +51,8 @@ public class StationListAdapter extends RecyclerView.Adapter<StationListAdapter.
         private ImageView ivUploaded;
         private ImageButton btnAdjustUp;
         private ImageButton btnAdjustDown;
-        private ImageButton btnDeleteStation;
+
+
 
         private ViewHolder(View v, boolean editable) {
             super(v);
@@ -43,7 +62,7 @@ public class StationListAdapter extends RecyclerView.Adapter<StationListAdapter.
             // now just use iv_up to instead the whole button, should be an whole ImageButton
             btnAdjustUp = (ImageButton) v.findViewById(R.id.iv_up);
             btnAdjustDown = (ImageButton) v.findViewById(R.id.iv_down);
-            btnDeleteStation = (ImageButton) v.findViewById(R.id.btn_delete_station);
+
 
             if (! editable) {
                 // btnAdjust & btnDeleteStation is invisible now
@@ -61,21 +80,22 @@ public class StationListAdapter extends RecyclerView.Adapter<StationListAdapter.
                 // btnAdjust & btnDeleteStation is visible now
                 btnAdjustUp.setVisibility(View.VISIBLE);
                 btnAdjustDown.setVisibility(View.VISIBLE);
-                btnDeleteStation.setVisibility(View.VISIBLE);
+                //btnDeleteStation.setVisibility(View.VISIBLE);
                 tvStationSequence.setVisibility(View.INVISIBLE);
                 ivUploaded.setVisibility(View.INVISIBLE);
 
                 final Context context = v.getContext();
                 // OnClick btnAdjust to change sequence (not implemented yet)
                 // OnClick btnDeleteStation to delete station
-                btnDeleteStation.setOnClickListener(new View.OnClickListener() {
+               /*// btnDeleteStation.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         // should be a dialog to ensure delete or not
-                        Toast.makeText(context, "delete learning station?", Toast.LENGTH_SHORT).show();
+
+                       // Toast.makeText(context, "delete learning station?", Toast.LENGTH_SHORT).show();
 
                     }
-                });
+                });*/
 
                 // OnClick Item
                 v.setOnClickListener(new View.OnClickListener() {
@@ -94,9 +114,10 @@ public class StationListAdapter extends RecyclerView.Adapter<StationListAdapter.
         }
     }
 
-    public StationListAdapter(String[] stationList, boolean editable) {
+    public StationListAdapter(ArrayList<Station> stationList, boolean editable,String key) {
         myDataSet = stationList;
         this.editable = editable;
+        this.key=key;
     }
 
     @Override
@@ -108,10 +129,10 @@ public class StationListAdapter extends RecyclerView.Adapter<StationListAdapter.
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder viewHolder, int position) {
-        viewHolder.tvStationName.setText(myDataSet[position]);
-        viewHolder.tvStationSequence.setText(String.valueOf(position + 1) + ".");
-
+    public void onBindViewHolder(ViewHolder viewHolder, final int position) {
+        viewHolder.tvStationName.setText(myDataSet.get(position).getStationName());
+        //viewHolder.tvStationSequence.setText(String.valueOf(position + 1) + ".");
+        viewHolder.tvStationSequence.setText(String.valueOf(position+1));
         // If user is trainer, ivUploaded should be invisible
         // viewholder.ivUploaded.setVisibility(View.GONE); if user is trainer
 
@@ -119,16 +140,94 @@ public class StationListAdapter extends RecyclerView.Adapter<StationListAdapter.
         // Now just randomly pick the image according to position, should be implemented correctly
         // The image of "√" should be changed to a nicer picture, find it in Layout item_station_list
         Resources res = viewHolder.itemView.getContext().getResources();
+        final Context context = viewHolder.itemView.getContext();
+        if(editable) {
+            btnDeleteStation = (ImageButton) viewHolder.itemView.findViewById(R.id.btn_delete_station);
+            btnDeleteStation.setVisibility(View.VISIBLE);
+
+            btnDeleteStation.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    alert(context,position);
+                    Log.i("tag", String.valueOf(position));
+                }
+            });
+        }
+
 
         if (position % 2 == 0) {
-            viewHolder.ivUploaded.setImageDrawable(res.getDrawable(android.R.drawable.checkbox_on_background, null));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                viewHolder.ivUploaded.setImageDrawable(res.getDrawable(android.R.drawable.checkbox_on_background, null));
+            }
         }
 
     }
 
+    public void alert(Context context, final int position) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Delete");
+        builder.setMessage("Delet this station?");
+        final Context context1 = context;
+        builder.setPositiveButton("sure", new DialogInterface.OnClickListener() {
+
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Log.i("tag","in on click");
+
+                DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+                final Station station = myDataSet.get(position);
+                //Log.i("tag11100",key);
+
+                Query query = ref.child("stations").child(key).orderByChild("stationName").equalTo(station.getStationName());
+                Log.i("tag11101",station.getStationName());
+                query.addListenerForSingleValueEvent(new ValueEventListener() {
+
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Log.i("tag11100", String.valueOf(dataSnapshot.getChildrenCount()));
+                        if(dataSnapshot.getChildrenCount()==1)
+                        {
+
+                            for(DataSnapshot childSnapshot : dataSnapshot.getChildren())
+                            {
+                                String key1 = childSnapshot.getKey();
+
+                                FirebaseDatabase.getInstance().getReference("stations").child(key).child(key1).removeValue();
+                                Toast.makeText(context1, station.getStationName()+" deleted successfully!", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                    }
+
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+                // String Id = trailID;
+                // Log.i("tag", Id);
+
+
+
+            }
+        });
+        builder.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        AlertDialog dialog= builder.create();
+        dialog.show();
+    }
     @Override
     public int getItemCount() {
-        return myDataSet.length;
+        return myDataSet.size();
     }
+
+
 }
 
