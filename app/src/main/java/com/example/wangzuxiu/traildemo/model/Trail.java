@@ -16,16 +16,18 @@ public class Trail {
     public String trailDate;
     public String timestamp;
     public String trailId;
+    public String key;
 
     public Trail(){
 
     }
 
-    public Trail(String trailName, String trailDate, String timestamp,String trailId){
+    public Trail(String trailName, String trailDate, String timestamp,String trailId,String key){
         this.timestamp=timestamp;
         this.trailDate=trailDate;
         this.trailName=trailName;
         this.trailId=trailId;
+        this.key=key;
         //this.userId=userId;
         //this.trailId=trailId;
     }
@@ -37,6 +39,7 @@ public class Trail {
         result.put("trailDate", trailDate);
         result.put("timestamp", timestamp);
         result.put("trailId",trailId);
+        result.put("key",key);
 
         return result;
     }

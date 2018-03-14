@@ -37,7 +37,6 @@ public class TrailListAdapter extends RecyclerView.Adapter<TrailListAdapter.View
     private boolean editable;
     private Context context;
     private String trailId;
-    final String[] key = new String[1];
     private Trail trail;
     private Intent intent;
 
@@ -160,7 +159,8 @@ public class TrailListAdapter extends RecyclerView.Adapter<TrailListAdapter.View
                     intent.putExtra("trailName",trail.trailName);
                     intent.putExtra("trailDate",trail.trailDate);
                     intent.putExtra("timestamp",trail.timestamp);
-                    intent.putExtra("trailId",trail.trailDate+"-"+trail.trailName);
+                    intent.putExtra("key",trail.key);
+                    //intent.putExtra("trailId",trail.trailDate+"-"+trail.trailName);
                     context.startActivity(intent);
 
 
@@ -177,8 +177,9 @@ public class TrailListAdapter extends RecyclerView.Adapter<TrailListAdapter.View
                 public void onClick(View v) {
                     // Launch StationListActivity
                     final Context context = v.getContext();
+                    trail=myDataSet.get(position);
                     Intent intent = new Intent(context, StationListActivity.class);
-                    //intent.putExtra("trailId",key[0]);
+                    intent.putExtra("key",trail.key);
                     context.startActivity(intent);
                 }
             });

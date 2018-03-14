@@ -123,7 +123,7 @@ public class SelectModeActivity extends AppCompatActivity implements View.OnClic
             startActivity(i);
         }
         else if(select=="Participant"){
-            startActivity(new Intent(SelectModeActivity.this,InputTrailIdActivity.class));
+            startActivity(new Intent(SelectModeActivity.this,ParticipantTrailActivity.class));
         }
     }
 

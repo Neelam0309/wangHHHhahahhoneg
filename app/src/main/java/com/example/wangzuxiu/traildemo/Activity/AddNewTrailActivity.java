@@ -125,10 +125,12 @@ public class AddNewTrailActivity extends AppCompatActivity {
         //tv_id.setText(trailId);
 
         String trailId=tv_date.getText().toString()+"-"+name;
-        final Trail trail=new Trail(name,tv_date.getText().toString(),et_trail_date,trailId);
 
         if (flag==0){  //need to generate a new key
+
             String key=mDatabase.child("trails").push().getKey();
+            Trail trail=new Trail(name,tv_date.getText().toString(),et_trail_date,trailId,key);
+
             Map<String,Object> childUpdates=new HashMap<>();
             Map<String,Object> trailList=trail.toMap();
             childUpdates.put("/trails/"+key,trailList);
@@ -138,32 +140,13 @@ public class AddNewTrailActivity extends AppCompatActivity {
         }
         if(flag==1){
             //String key=getIntent().getStringExtra("trailId");
-            String uniqueId=getIntent().getStringExtra("trailId");
-            Query query=mDatabase.child("trainer-trails").child(uid).orderByChild("trailId").equalTo(uniqueId);
-
-                query.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        if(dataSnapshot.getChildrenCount()==1){
-                                //key[0] =dataSnapshot.getChildren().iterator().next().getKey();
-                                for(DataSnapshot childSnapshot:dataSnapshot.getChildren()){
-                                    String key =childSnapshot.getKey();
-                                    Map<String,Object> childUpdates=new HashMap<>();
-                                    Map<String,Object> trailList=trail.toMap();
-                                    childUpdates.put("/trails/"+ key,trailList);
-                                    childUpdates.put("/trainer-trails/"+uid+"/"+ key,trailList);
-                                    mDatabase.updateChildren(childUpdates);
-                                    }
-                            }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
-
-
+            String key=getIntent().getStringExtra("key");
+            Trail trail=new Trail(name,tv_date.getText().toString(),et_trail_date,trailId,key);
+            Map<String,Object> childUpdates=new HashMap<>();
+            Map<String,Object> trailList=trail.toMap();
+            childUpdates.put("/trails/"+ key,trailList);
+            childUpdates.put("/trainer-trails/"+uid+"/"+ key,trailList);
+            mDatabase.updateChildren(childUpdates);
 
         }
 
