@@ -45,9 +45,11 @@ public class AddNewStationActivity extends AppCompatActivity {
                 if(isValid()){
 
                     save();
+                    finish();
                 }
 
-                finish();
+
+
             }
         });
     }
@@ -55,15 +57,15 @@ public class AddNewStationActivity extends AppCompatActivity {
     public boolean isValid(){
         boolean isValid=true;
         if(TextUtils.isEmpty(et_stationName.getText().toString().trim())){
-            et_stationName.setError("please fill in the name");
+            et_stationName.setError("Please enter station name");
             isValid=false;
         }
         if(TextUtils.isEmpty(et_stationLocation.getText().toString().trim())){
-            et_stationLocation.setError("please select a date");
+            et_stationLocation.setError("Please enter location");
             isValid=false;
         }
         if(TextUtils.isEmpty(et_instruction.getText().toString().trim())){
-            et_instruction.setError("please select a date");
+            et_instruction.setError("Please enter instructions");
             isValid=false;
         }
         return isValid;
