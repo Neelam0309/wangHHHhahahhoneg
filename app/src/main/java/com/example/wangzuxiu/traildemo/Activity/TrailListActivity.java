@@ -47,7 +47,7 @@ public class TrailListActivity extends AppCompatActivity{
     private DatabaseReference mDatabase;
     private GoogleSignInClient mGoogleSignInClient;
     private String uid= FirebaseAuth.getInstance().getUid();
-    private FirebaseAuth mAuth;
+
 
     private ArrayList<Trail> trailList=new ArrayList<Trail>();
     //private String[][] trailList = {{"Tour to ISS", "20180301-ISS", "2018-03-01"}, {"Tour to NUS", "20180401-NUS", "2018-04-01"}};
@@ -99,7 +99,10 @@ public class TrailListActivity extends AppCompatActivity{
         fabAddTrail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(TrailListActivity.this, AddNewTrailActivity.class));
+                int flag=0;
+                Intent intent=new Intent(TrailListActivity.this,AddNewTrailActivity.class);
+                intent.putExtra("flag",0);
+                startActivity(intent);
             }
         });
 
@@ -123,42 +126,46 @@ public class TrailListActivity extends AppCompatActivity{
 
         } else if (i == R.id.action_edit) {
 
-            mDatabase = FirebaseDatabase.getInstance().getReference("trainer-trails");
+            startActivity(new Intent(TrailListActivity.this,EditTrailListActivity.class));
 
-            mDatabase.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    ArrayList<Trail> trailList = new ArrayList<Trail>();
-                    for (DataSnapshot child : dataSnapshot.child(uid).getChildren()) {
-                        Trail trail = child.getValue(Trail.class);
-                        trailList.add(trail);
-                    }
-                    trailListAdapter = new TrailListAdapter(trailList, true);
-                    rvTrailList.setAdapter(trailListAdapter);
-
-                    tvEmptyTrailList = findViewById(R.id.tv_empty_trail_list);
-                    // For Participant Mode, text of tvEmptyTrailList should be changed
-                    // tvEmptyTrailList.setText(R.string.empty_trail_list_participant); if User is participant
-                    tvEmptyTrailList.setVisibility(trailListAdapter.getItemCount() != 0 ? View.GONE : View.VISIBLE);
-
-
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
+//            mDatabase = FirebaseDatabase.getInstance().getReference("trainer-trails");
+//
+//            mDatabase.addValueEventListener(new ValueEventListener() {
+//                @Override
+//                public void onDataChange(DataSnapshot dataSnapshot) {
+//                    ArrayList<Trail> trailList = new ArrayList<Trail>();
+//                    for (DataSnapshot child : dataSnapshot.child(uid).getChildren()) {
+//                        Trail trail = child.getValue(Trail.class);
+//                        trailList.add(trail);
+//                    }
+//                    trailListAdapter = new TrailListAdapter(trailList, true);
+//                    rvTrailList.setAdapter(trailListAdapter);
+//
+//                    tvEmptyTrailList = findViewById(R.id.tv_empty_trail_list);
+//                    // For Participant Mode, text of tvEmptyTrailList should be changed
+//                    // tvEmptyTrailList.setText(R.string.empty_trail_list_participant); if User is participant
+//                    tvEmptyTrailList.setVisibility(trailListAdapter.getItemCount() != 0 ? View.GONE : View.VISIBLE);
+//
+//
+//                }
+//
+//                @Override
+//                public void onCancelled(DatabaseError databaseError) {
+//
+//                }
+//            });
         }
         return true;
     }
 
     private void signOut() {
         // Firebase sign out
+
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
+        FirebaseAuth mAuth=FirebaseAuth.getInstance();
         mAuth.signOut();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);  //google log out
         // Google sign out

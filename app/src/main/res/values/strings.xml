@@ -15,7 +15,7 @@
     <string name="trail_name">Learning Trail Name</string>
     <string name="trail_date">Learning Trail Date</string>
     <string name="trail_id">Learning Trail ID</string>
-    <string name="trail_id_with_colon">Learning Trail ID: </string>
+    <string name="trail_id_with_colon">Trail ID:</string>
     <string name="station_name">Trail Station Name</string>
     <string name="station_location">Location</string>
     <string name="station_instruction">Instruction</string>

@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v7.view.menu.MenuView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,30 +11,35 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.wangzuxiu.traildemo.Activity.AddNewTrailActivity;
 import com.example.wangzuxiu.traildemo.Activity.StationListActivity;
 import com.example.wangzuxiu.traildemo.R;
 import com.example.wangzuxiu.traildemo.model.Trail;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 /**
  * Created by mia on 28/02/18.
  */
 
-public class TrailListAdapter extends RecyclerView.Adapter<TrailListAdapter.ViewHolder>  {
+public class TrailListAdapter extends RecyclerView.Adapter<TrailListAdapter.ViewHolder> {
 
     private ArrayList<Trail> myDataSet=new ArrayList<>();
     private boolean editable;
     private Context context;
     private String trailId;
+    final String[] key = new String[1];
+    private Trail trail;
+    private Intent intent;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -50,7 +54,6 @@ public class TrailListAdapter extends RecyclerView.Adapter<TrailListAdapter.View
             tvTrailId = (TextView) v.findViewById(R.id.tv_trail_id);
             tvTrailDate = (TextView) v.findViewById(R.id.tv_trail_date);
             btnDeleteTrail = (ImageButton) v.findViewById(R.id.btn_delete_trail);
-            Context context=v.getContext();
 
         }
     }
@@ -66,18 +69,7 @@ public class TrailListAdapter extends RecyclerView.Adapter<TrailListAdapter.View
                 .inflate(R.layout.item_trail_list, parent, false);
 
         ViewHolder holder= new ViewHolder(v, editable);
-        if (! editable) {
-            v.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // Launch StationListActivity
-                    final Context context = v.getContext();
-                    Intent intent = new Intent(context, StationListActivity.class);;
-                    context.startActivity(intent);
-                }
-            });
-        }
-
+        //if it can not editable,you will go to the trail Station list
 
         return holder;
     }
@@ -92,11 +84,29 @@ public class TrailListAdapter extends RecyclerView.Adapter<TrailListAdapter.View
             public void onClick(DialogInterface dialog, int which) {
                 DatabaseReference ref= FirebaseDatabase.getInstance().getReference();
                 Trail trail=myDataSet.get(position);
-                String Id=trail.timestamp+"-"+trail.trailName;
-                Log.i("tag",Id);
-                ref.child("trails").child(Id).removeValue();
-                String uid=FirebaseAuth.getInstance().getUid();
-                ref.child("trainer-trails").child(uid).child(Id).removeValue();
+                String Id=trail.trailDate+"-"+trail.trailName;
+                Query query=ref.child("trails").orderByChild("trailId").equalTo(Id);
+
+                query.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.getChildrenCount()==1){
+                            for(DataSnapshot childSnapshot:dataSnapshot.getChildren()){
+                                String key=childSnapshot.getKey();
+                                Log.i("tag",key);
+                                FirebaseDatabase.getInstance().getReference().child("trails").child(key).removeValue();
+                                String uid=FirebaseAuth.getInstance().getUid();
+                                FirebaseDatabase.getInstance().getReference().child("trainer-trails").child(uid).child(key).removeValue();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
 
             }
         });
@@ -123,7 +133,7 @@ public class TrailListAdapter extends RecyclerView.Adapter<TrailListAdapter.View
         if (editable){
             ImageButton btnDeleteTrail = (ImageButton) viewHolder.itemView.findViewById(R.id.btn_delete_trail);
             btnDeleteTrail.setVisibility(View.VISIBLE);
-
+            //delete a learning trail
             btnDeleteTrail.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -132,13 +142,43 @@ public class TrailListAdapter extends RecyclerView.Adapter<TrailListAdapter.View
                 }
             });
 
-
+            //update trail
             viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     // Launch EditTrailActivity, can be revised title and setAutoFilled from AddNewTrailActivity (not implemented yet)
-                    Context context = v.getContext();
-                    Intent intent = new Intent(context, AddNewTrailActivity.class);;
+
+
+                    DatabaseReference ref= FirebaseDatabase.getInstance().getReference();
+                    trail=myDataSet.get(position);
+                    String Id=trail.trailDate+"-"+trail.trailName;
+
+                    intent = new Intent(context, AddNewTrailActivity.class);
+                    //intent.putExtra("trailId",key[0]);
+
+                    intent.putExtra("flag",1);
+                    intent.putExtra("trailName",trail.trailName);
+                    intent.putExtra("trailDate",trail.trailDate);
+                    intent.putExtra("timestamp",trail.timestamp);
+                    intent.putExtra("trailId",trail.trailDate+"-"+trail.trailName);
+                    context.startActivity(intent);
+
+
+
+                }
+            });
+
+
+        }
+
+        if (! editable) {
+            viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Launch StationListActivity
+                    final Context context = v.getContext();
+                    Intent intent = new Intent(context, StationListActivity.class);
+                    //intent.putExtra("trailId",key[0]);
                     context.startActivity(intent);
                 }
             });

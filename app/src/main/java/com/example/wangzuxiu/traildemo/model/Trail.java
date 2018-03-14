@@ -15,15 +15,17 @@ public class Trail {
     public String trailName;
     public String trailDate;
     public String timestamp;
+    public String trailId;
 
     public Trail(){
 
     }
 
-    public Trail(String trailName, String trailDate, String timestamp){
+    public Trail(String trailName, String trailDate, String timestamp,String trailId){
         this.timestamp=timestamp;
         this.trailDate=trailDate;
         this.trailName=trailName;
+        this.trailId=trailId;
         //this.userId=userId;
         //this.trailId=trailId;
     }
@@ -34,6 +36,7 @@ public class Trail {
         result.put("trailName", trailName);
         result.put("trailDate", trailDate);
         result.put("timestamp", timestamp);
+        result.put("trailId",trailId);
 
         return result;
     }

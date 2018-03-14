@@ -5,9 +5,11 @@ package com.example.wangzuxiu.traildemo.Activity;
 import com.example.wangzuxiu.traildemo.R;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -15,9 +17,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.wangzuxiu.traildemo.model.Trail;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -33,10 +39,11 @@ public class AddNewTrailActivity extends AppCompatActivity {
     private SimpleDateFormat formatter=new SimpleDateFormat("yyyyMMdd hh:mm:ss");
     private SimpleDateFormat formatter_date=new SimpleDateFormat("yyyMMdd");
     private Date date;
-    String uid,et_trail_date,trailId,name;
+    String et_trail_date,name;
+    String uid=getUid();
     Calendar selectedDate = Calendar.getInstance();
-
-
+    private String trailName=null,trailDate=null,timestamp=null;
+    private int flag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,19 +52,34 @@ public class AddNewTrailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_new_trail);
 
         // Could use DatePicker to choose the date
+        Intent intent=getIntent();
+        flag=intent.getIntExtra("flag",0);
 
-        // Learning Trail ID should align with the format ‘YYYYMMDD-<Trail Code>'
-        // Trail Code should be one word or restricted to X letters?(eg. 3)
-        mDatabase = FirebaseDatabase.getInstance().getReference();
         tv_name=findViewById(R.id.et_trail_name);
         tv_date=findViewById(R.id.et_trail_date);
-        //tv_id=findViewById(R.id.et_trail_id);
 
-        date=new Date(System.currentTimeMillis());
-        et_trail_date=formatter.format(date); //timestamp
-        uid=getUid();
+        if(flag==0){  //add new trail
 
-        tv_date.setText(formatter_date.format(selectedDate.getTime()));
+            date=new Date(System.currentTimeMillis());
+            et_trail_date=formatter.format(date); //timestamp
+            tv_date.setText(formatter_date.format(selectedDate.getTime()));
+        }
+
+        else if (flag==1){  //edit a trail
+            trailName=intent.getStringExtra("trailName");
+            trailDate=intent.getStringExtra("trailDate");
+            timestamp=intent.getStringExtra("timestamp");
+            et_trail_date=timestamp;
+
+            tv_name.setText(trailName);
+            tv_date.setText(trailDate);
+        }
+
+
+
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+
+
         tv_date.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 DatePickerDialog.OnDateSetListener onDateSetListener =
@@ -86,9 +108,8 @@ public class AddNewTrailActivity extends AppCompatActivity {
                 // save the new trail
                 if(isValid()){
 
-                    save();
+                    save(flag);
                 }
-
 
                 finish();
             }
@@ -98,25 +119,53 @@ public class AddNewTrailActivity extends AppCompatActivity {
         return FirebaseAuth.getInstance().getCurrentUser().getUid();
     }
 
-    public void save(){
+    public void save(int flag){
 
         name=tv_name.getText().toString();
-        trailId=et_trail_date+"-"+name;
         //tv_id.setText(trailId);
 
-        Trail trail=new Trail(name,tv_date.getText().toString(),et_trail_date);
-        String key=trailId;
-//        mDatabase.child(key).child("userId").setValue(trail.userId);
-//        mDatabase.child(key).child("trailName").setValue(trail.trailName);
-//        mDatabase.child(key).child("trailDate").setValue(trail.trailDate);
-//        mDatabase.child(key).child("timestamp").setValue(trail.timestamp);
+        String trailId=tv_date.getText().toString()+"-"+name;
+        final Trail trail=new Trail(name,tv_date.getText().toString(),et_trail_date,trailId);
 
-        Map<String,Object> childUpdates=new HashMap<>();
-        Map<String,Object> trailList=trail.toMap();
-        childUpdates.put("/trails/"+key,trailList);
-        childUpdates.put("/trainer-trails/"+uid+"/"+key,trailList);
+        if (flag==0){  //need to generate a new key
+            String key=mDatabase.child("trails").push().getKey();
+            Map<String,Object> childUpdates=new HashMap<>();
+            Map<String,Object> trailList=trail.toMap();
+            childUpdates.put("/trails/"+key,trailList);
+            childUpdates.put("/trainer-trails/"+uid+"/"+key,trailList);
 
-        mDatabase.updateChildren(childUpdates);
+            mDatabase.updateChildren(childUpdates);
+        }
+        if(flag==1){
+            //String key=getIntent().getStringExtra("trailId");
+            String uniqueId=getIntent().getStringExtra("trailId");
+            Query query=mDatabase.child("trainer-trails").child(uid).orderByChild("trailId").equalTo(uniqueId);
+
+                query.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.getChildrenCount()==1){
+                                //key[0] =dataSnapshot.getChildren().iterator().next().getKey();
+                                for(DataSnapshot childSnapshot:dataSnapshot.getChildren()){
+                                    String key =childSnapshot.getKey();
+                                    Map<String,Object> childUpdates=new HashMap<>();
+                                    Map<String,Object> trailList=trail.toMap();
+                                    childUpdates.put("/trails/"+ key,trailList);
+                                    childUpdates.put("/trainer-trails/"+uid+"/"+ key,trailList);
+                                    mDatabase.updateChildren(childUpdates);
+                                    }
+                            }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+
+
+        }
 
     }
     public boolean isValid(){
