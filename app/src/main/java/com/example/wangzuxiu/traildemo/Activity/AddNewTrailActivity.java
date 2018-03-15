@@ -48,7 +48,7 @@ public class AddNewTrailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.setTitle("new_trail");
+        this.setTitle("Add new learning trail");
         setContentView(R.layout.activity_add_new_trail);
 
         // Could use DatePicker to choose the date
@@ -60,16 +60,16 @@ public class AddNewTrailActivity extends AppCompatActivity {
 
         if(flag==0){  //add new trail
 
-            date=new Date(System.currentTimeMillis());
+   /*         date=new Date(System.currentTimeMillis());
             et_trail_date=formatter.format(date); //timestamp
-            tv_date.setText(formatter_date.format(selectedDate.getTime()));
+            tv_date.setText(formatter_date.format(selectedDate.getTime()));*/
         }
 
         else if (flag==1){  //edit a trail
             trailName=intent.getStringExtra("trailName");
             trailDate=intent.getStringExtra("trailDate");
             timestamp=intent.getStringExtra("timestamp");
-            et_trail_date=timestamp;
+            et_trail_date=trailDate;
 
             tv_name.setText(trailName);
             tv_date.setText(trailDate);

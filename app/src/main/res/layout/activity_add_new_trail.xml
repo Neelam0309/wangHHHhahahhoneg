@@ -43,7 +43,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/tv_trail_date"
             android:layout_marginBottom="20dp"
-            android:hint="2018-03-05"
+            android:hint="@string/date_format"
             android:inputType="none" />
 
         <Space
@@ -59,6 +59,8 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="false"
+            android:background="@color/colorPrimary"
+            android:textColor="@android:color/white"
             android:text="@string/save" />
 
     </RelativeLayout>

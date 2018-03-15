@@ -29,6 +29,7 @@
     <string name="upload">Upload</string>
     <string name="menu_log_out">Log out</string>
     <string name="menu_edit">Edit</string>
+    <string name="date_format">YYYY-MM-DD</string>
 
     <string name="trail_list">Trail List</string>
 
