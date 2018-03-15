@@ -84,18 +84,41 @@ public class TrailListAdapter extends RecyclerView.Adapter<TrailListAdapter.View
                 DatabaseReference ref= FirebaseDatabase.getInstance().getReference();
                 Trail trail=myDataSet.get(position);
                 String Id=trail.trailDate+"-"+trail.trailName;
-                Query query=ref.child("trails").orderByChild("trailId").equalTo(Id);
+                final Query query=ref.child("trails").orderByChild("trailId").equalTo(Id);
 
                 query.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         if(dataSnapshot.getChildrenCount()==1){
                             for(DataSnapshot childSnapshot:dataSnapshot.getChildren()){
-                                String key=childSnapshot.getKey();
+                                final String key=childSnapshot.getKey();
                                 Log.i("tag",key);
                                 FirebaseDatabase.getInstance().getReference().child("trails").child(key).removeValue();
                                 String uid=FirebaseAuth.getInstance().getUid();
                                 FirebaseDatabase.getInstance().getReference().child("trainer-trails").child(uid).child(key).removeValue();
+
+                                DatabaseReference ref=FirebaseDatabase.getInstance().getReference().child("participant-trails");
+                                ref.addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        for(DataSnapshot childSnapshot: dataSnapshot.getChildren()){
+                                            String uidKey=childSnapshot.getKey();
+                                            for(DataSnapshot child:childSnapshot.getChildren()){
+                                                if(child.getKey().equals(key)){
+                                                    FirebaseDatabase.getInstance().getReference().child("participant-trails").child(uidKey).child(child.getKey()).removeValue();
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+
+                                    }
+                                });
+
+
+
                             }
                         }
                     }
@@ -163,11 +186,8 @@ public class TrailListAdapter extends RecyclerView.Adapter<TrailListAdapter.View
                     //intent.putExtra("trailId",trail.trailDate+"-"+trail.trailName);
                     context.startActivity(intent);
 
-
-
                 }
             });
-
 
         }
 

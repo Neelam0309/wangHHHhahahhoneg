@@ -128,32 +128,6 @@ public class TrailListActivity extends AppCompatActivity{
 
             startActivity(new Intent(TrailListActivity.this,EditTrailListActivity.class));
 
-//            mDatabase = FirebaseDatabase.getInstance().getReference("trainer-trails");
-//
-//            mDatabase.addValueEventListener(new ValueEventListener() {
-//                @Override
-//                public void onDataChange(DataSnapshot dataSnapshot) {
-//                    ArrayList<Trail> trailList = new ArrayList<Trail>();
-//                    for (DataSnapshot child : dataSnapshot.child(uid).getChildren()) {
-//                        Trail trail = child.getValue(Trail.class);
-//                        trailList.add(trail);
-//                    }
-//                    trailListAdapter = new TrailListAdapter(trailList, true);
-//                    rvTrailList.setAdapter(trailListAdapter);
-//
-//                    tvEmptyTrailList = findViewById(R.id.tv_empty_trail_list);
-//                    // For Participant Mode, text of tvEmptyTrailList should be changed
-//                    // tvEmptyTrailList.setText(R.string.empty_trail_list_participant); if User is participant
-//                    tvEmptyTrailList.setVisibility(trailListAdapter.getItemCount() != 0 ? View.GONE : View.VISIBLE);
-//
-//
-//                }
-//
-//                @Override
-//                public void onCancelled(DatabaseError databaseError) {
-//
-//                }
-//            });
         }
         return true;
     }

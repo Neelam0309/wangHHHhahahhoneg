@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.example.wangzuxiu.traildemo.Adapter.ParticipantTrailListAdapter;
 import com.example.wangzuxiu.traildemo.Adapter.TrailListAdapter;
 import com.example.wangzuxiu.traildemo.R;
 import com.example.wangzuxiu.traildemo.model.Trail;
@@ -70,7 +71,7 @@ public class ParticipantTrailActivity extends AppCompatActivity {
                     Trail trail=child.getValue(Trail.class);
                     trailList.add(trail);
                 }
-                trailListAdapter = new TrailListAdapter(trailList,false);
+                trailListAdapter = new ParticipantTrailListAdapter(trailList,false);
                 rvTrailList.setAdapter(trailListAdapter);
 
                 tvEmptyTrailList = findViewById(R.id.tv_empty_participant_list);

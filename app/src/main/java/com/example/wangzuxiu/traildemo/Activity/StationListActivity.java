@@ -137,32 +137,6 @@ public class StationListActivity extends AppCompatActivity {
             startActivity(intent);
             //   mDatabase = FirebaseDatabase.getInstance().getReference("stations");
 
-            mDatabase.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                /*    ArrayList<Station> stationList = new ArrayList<Station>();
-                    for (DataSnapshot child : dataSnapshot.child(key).getChildren()) {
-                        Station station = child.getValue(Station.class);
-                        stationList.add(station);
-                    }
-                    key = intent.getStringExtra("key");
-                    stationListAdapter = new StationListAdapter(stationList, true,key);
-                    rvStationList.setAdapter(stationListAdapter);
-
-
-                    tvEmptyStationList = findViewById(R.id.tv_empty_trail_list);
-                    // For Participant Mode, text of tvEmptyTrailList should be changed
-                    // tvEmptyTrailList.setText(R.string.empty_trail_list_participant); if User is participant
-                    // tvEmptyStationList.setVisibility(stationListAdapter.getItemCount() != 0 ? View.GONE : View.VISIBLE);
-
-*/
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
         }
         return true;
     }

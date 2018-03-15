@@ -1,5 +1,6 @@
 package com.example.wangzuxiu.traildemo.Adapter;
 
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -17,6 +18,7 @@ import com.example.wangzuxiu.traildemo.fragment.StationUpdateFragment;
 public class TabPagerAdapter extends FragmentStatePagerAdapter {
     int numOfTabs;
     int flag;
+    String message;
 
     public TabPagerAdapter(FragmentManager fm, int numOfTabs) {
         super(fm);

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.media.Image;
 import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -49,6 +50,7 @@ public class StationListAdapter extends RecyclerView.Adapter<StationListAdapter.
         private ImageView ivUploaded;
         private ImageButton btnAdjustUp;
         private ImageButton btnAdjustDown;
+        private ImageView btnprogress;
         private String key;
 
 
@@ -61,8 +63,9 @@ public class StationListAdapter extends RecyclerView.Adapter<StationListAdapter.
             btnAdjustUp = (ImageButton) v.findViewById(R.id.iv_up);
             btnAdjustDown = (ImageButton) v.findViewById(R.id.iv_down);
             this.key=key;
+            btnprogress=v.findViewById(R.id.iv_uploaded);
 
-
+            btnprogress.setVisibility(View.GONE);
             if (! editable) {
                 // btnAdjust & btnDeleteStation is invisible now
                 v.setOnClickListener(new View.OnClickListener() {
@@ -140,6 +143,7 @@ public class StationListAdapter extends RecyclerView.Adapter<StationListAdapter.
         // Now just randomly pick the image according to position, should be implemented correctly
         // The image of "√" should be changed to a nicer picture, find it in Layout item_station_list
         Resources res = viewHolder.itemView.getContext().getResources();
+
         final Context context = viewHolder.itemView.getContext();
         if(editable) {
             btnDeleteStation = (ImageButton) viewHolder.itemView.findViewById(R.id.btn_delete_station);
@@ -175,11 +179,11 @@ public class StationListAdapter extends RecyclerView.Adapter<StationListAdapter.
         }
 
 
-        if (position % 2 == 0) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                viewHolder.ivUploaded.setImageDrawable(res.getDrawable(android.R.drawable.checkbox_on_background, null));
-            }
-        }
+//        if (position % 2 == 0) {
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                viewHolder.ivUploaded.setImageDrawable(res.getDrawable(android.R.drawable.checkbox_on_background, null));
+//            }
+//        }
 
     }
 
