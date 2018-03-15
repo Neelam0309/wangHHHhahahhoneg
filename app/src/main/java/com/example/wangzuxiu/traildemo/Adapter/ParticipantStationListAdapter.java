@@ -72,7 +72,7 @@ public class ParticipantStationListAdapter extends RecyclerView.Adapter<Particip
                         Context context = v.getContext();
                         Intent intent = new Intent(context, StationDetailActivity.class);
                         intent.putExtra("stationName", tvStationName.getText().toString());
-                        intent.putExtra("stationKey", key);
+                        intent.putExtra("trailKey", key);
                         context.startActivity(intent);
                     }
                 });

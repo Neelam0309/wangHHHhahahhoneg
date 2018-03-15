@@ -7,6 +7,7 @@ import android.os.StrictMode;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,17 +18,19 @@ import com.example.wangzuxiu.traildemo.Activity.AddNewItemActivity;
 import com.example.wangzuxiu.traildemo.Adapter.ItemListAdapter;
 import com.example.wangzuxiu.traildemo.R;
 import com.example.wangzuxiu.traildemo.model.ContributedItem;
+import com.example.wangzuxiu.traildemo.model.Station;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
 public class StationInfoFragment extends Fragment {
-    private TextView tvStationName;
+    private TextView tvStationName,tv_station_address,tv_station_instruction;
     private Button btnUpload;
     private RecyclerView rvMyItemList;
     private RecyclerView.Adapter itemListAdapter;
@@ -36,6 +39,8 @@ public class StationInfoFragment extends Fragment {
             {"fileURL", "My thought is ...", "Zhang Peiyan", "2018-03-03"},};
     private ArrayList<ContributedItem> ContributedItemList;
     private String uid= FirebaseAuth.getInstance().getUid();
+    private DatabaseReference mDatabase;
+    private Station station;
     public StationInfoFragment() {
     }
 
@@ -51,9 +56,43 @@ public class StationInfoFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         final View fragmentView = inflater.inflate(R.layout.fragment_station_info, container, false);
+        Bundle bundle=new Bundle();
+        bundle=this.getArguments();
+
+        String trailKey =bundle.getString("trailKey");
+
 
         tvStationName = (TextView) fragmentView.findViewById(R.id.tv_station_name);
+        tv_station_address = fragmentView.findViewById(R.id.tv_station_address);
+        tv_station_instruction = fragmentView.findViewById(R.id.tv_station_instruction);
+        mDatabase= FirebaseDatabase.getInstance().getReference();
         tvStationName.setText(getActivity().getTitle());
+        Query query = mDatabase.child("stations").child(trailKey).orderByChild("stationName").equalTo(getActivity().getTitle().toString());
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.getChildrenCount()==1)
+                {
+
+                    for(DataSnapshot childSnapshot : dataSnapshot.getChildren())
+                    {
+                        String key1 = childSnapshot.getKey();
+
+                        station = childSnapshot.getValue(Station.class);
+                        tvStationName.setText(station.getStationName());
+                        tv_station_address.setText(station.getGps());
+                        tv_station_instruction.setText(station.getInstructions());
+                    }
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
 
         btnUpload = (Button) fragmentView.findViewById(R.id.btn_upload);
         btnUpload.setOnClickListener(new View.OnClickListener() {

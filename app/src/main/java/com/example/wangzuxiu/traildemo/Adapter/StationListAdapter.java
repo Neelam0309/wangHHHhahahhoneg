@@ -75,7 +75,7 @@ public class StationListAdapter extends RecyclerView.Adapter<StationListAdapter.
                         Context context = v.getContext();
                         Intent intent = new Intent(context, StationDetailActivity.class);
                         intent.putExtra("stationName", tvStationName.getText().toString());
-                        intent.putExtra("stationKey", key);
+                        intent.putExtra("trailKey", key);
                         context.startActivity(intent);
                     }
                 });
@@ -167,8 +167,8 @@ public class StationListAdapter extends RecyclerView.Adapter<StationListAdapter.
                     System.out.println("station name"+station.getStationName());
                     intent.putExtra("flag",1);
                     intent.putExtra("stationName",station.getStationName());
-                    intent.putExtra("location",station.getGPS());
-                    System.out.println("location:"+station.getGPS());
+                    intent.putExtra("location",station.getGps());
+                    System.out.println("location:"+station.getGps());
                     intent.putExtra("instructions",station.getInstructions());
                     intent.putExtra("key",station.getStationKey());
 

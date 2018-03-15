@@ -12,17 +12,17 @@ public class Station {
 
     private int sequence;
     private String stationName;
-    private String GPS;
+    private String gps;
     private String instructions;
     private String stationKey;
 
     public Station() {
     }
 
-    public Station(String stationName, String GPS, String instructions,String stationKey) {
+    public Station(String stationName, String gps, String instructions,String stationKey) {
         // this.sequence = sequence;
         this.stationName = stationName;
-        this.GPS = GPS;
+        this.gps = gps;
         this.instructions = instructions;
         this.stationKey = stationKey;
     }
@@ -35,8 +35,8 @@ public class Station {
         return stationName;
     }
 
-    public String getGPS() {
-        return GPS;
+    public String getGps() {
+        return gps;
     }
 
     public String getInstructions() {
@@ -51,7 +51,7 @@ public class Station {
         HashMap<String, Object> result = new HashMap<>();
         //result.put("userId", userId);
         result.put("stationName", stationName);
-        result.put("location",GPS);
+        result.put("gps",gps);
         result.put("instructions", instructions);
         result.put("stationKey",stationKey);
         return result;
