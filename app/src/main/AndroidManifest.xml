@@ -28,6 +28,7 @@
         <activity android:name=".Activity.StationDetailActivity"></activity>
         <activity android:name=".Activity.EditTrailListActivity"></activity>
         <activity android:name=".Activity.ParticipantTrailActivity"></activity>
+        <activity android:name=".Activity.EditStationActivity"></activity>
 
         <meta-data android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id"/>

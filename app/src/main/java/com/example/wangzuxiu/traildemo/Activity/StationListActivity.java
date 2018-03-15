@@ -106,6 +106,7 @@ public class StationListActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(StationListActivity.this, AddNewStationActivity.class);
                 intent.putExtra("key",key);
+                intent.putExtra("flag",0);
                 startActivity(intent);
             }
         });
@@ -131,13 +132,15 @@ public class StationListActivity extends AppCompatActivity {
             signOut();
 
         } else if (i == R.id.action_edit) {
-
-            mDatabase = FirebaseDatabase.getInstance().getReference("stations");
+            Intent intent = new Intent(StationListActivity.this,EditStationActivity.class);
+            intent.putExtra("key",key);
+            startActivity(intent);
+            //   mDatabase = FirebaseDatabase.getInstance().getReference("stations");
 
             mDatabase.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    ArrayList<Station> stationList = new ArrayList<Station>();
+                /*    ArrayList<Station> stationList = new ArrayList<Station>();
                     for (DataSnapshot child : dataSnapshot.child(key).getChildren()) {
                         Station station = child.getValue(Station.class);
                         stationList.add(station);
@@ -152,7 +155,7 @@ public class StationListActivity extends AppCompatActivity {
                     // tvEmptyTrailList.setText(R.string.empty_trail_list_participant); if User is participant
                     // tvEmptyStationList.setVisibility(stationListAdapter.getItemCount() != 0 ? View.GONE : View.VISIBLE);
 
-
+*/
                 }
 
                 @Override

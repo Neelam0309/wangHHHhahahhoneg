@@ -18,11 +18,8 @@ import android.widget.Toast;
 
 import com.example.wangzuxiu.traildemo.Activity.AddNewStationActivity;
 import com.example.wangzuxiu.traildemo.Activity.StationDetailActivity;
-import com.example.wangzuxiu.traildemo.Activity.StationListActivity;
 import com.example.wangzuxiu.traildemo.R;
 import com.example.wangzuxiu.traildemo.model.Station;
-import com.example.wangzuxiu.traildemo.model.Trail;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -37,13 +34,14 @@ import java.util.ArrayList;
  */
 
 
-public class StationListAdapter extends RecyclerView.Adapter<StationListAdapter.ViewHolder>  {
+public class StationListAdapter extends RecyclerView.Adapter<StationListAdapter.ViewHolder> {
 
     private ArrayList<Station> myDataSet=new ArrayList<>();
     private boolean editable;
     private ImageButton btnDeleteStation;
     private String key;
-
+    private Station station;
+    private Intent intent;
     public static class ViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
         private TextView tvStationName;
@@ -51,10 +49,10 @@ public class StationListAdapter extends RecyclerView.Adapter<StationListAdapter.
         private ImageView ivUploaded;
         private ImageButton btnAdjustUp;
         private ImageButton btnAdjustDown;
+        private String key;
 
 
-
-        private ViewHolder(View v, boolean editable) {
+        private ViewHolder(View v, boolean editable, final String key) {
             super(v);
             tvStationName = (TextView) v.findViewById(R.id.tv_station_name);
             tvStationSequence = (TextView) v.findViewById(R.id.tv_station_sequence);
@@ -62,6 +60,7 @@ public class StationListAdapter extends RecyclerView.Adapter<StationListAdapter.
             // now just use iv_up to instead the whole button, should be an whole ImageButton
             btnAdjustUp = (ImageButton) v.findViewById(R.id.iv_up);
             btnAdjustDown = (ImageButton) v.findViewById(R.id.iv_down);
+            this.key=key;
 
 
             if (! editable) {
@@ -73,6 +72,7 @@ public class StationListAdapter extends RecyclerView.Adapter<StationListAdapter.
                         Context context = v.getContext();
                         Intent intent = new Intent(context, StationDetailActivity.class);
                         intent.putExtra("stationName", tvStationName.getText().toString());
+                        intent.putExtra("stationKey", key);
                         context.startActivity(intent);
                     }
                 });
@@ -125,7 +125,7 @@ public class StationListAdapter extends RecyclerView.Adapter<StationListAdapter.
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_station_list, parent, false);
 
-        return new ViewHolder(v, editable);
+        return new ViewHolder(v, editable,key);
     }
 
     @Override
@@ -152,6 +152,26 @@ public class StationListAdapter extends RecyclerView.Adapter<StationListAdapter.
                     Log.i("tag", String.valueOf(position));
                 }
             });
+            viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    //DatabaseReference ref= FirebaseDatabase.getInstance().getReference();
+                    station=myDataSet.get(position);
+                    intent = new Intent(context, AddNewStationActivity.class);
+                    //intent.putExtra("trailId",key[0]);
+                    System.out.println("station name"+station.getStationName());
+                    intent.putExtra("flag",1);
+                    intent.putExtra("stationName",station.getStationName());
+                    intent.putExtra("location",station.getGPS());
+                    System.out.println("location:"+station.getGPS());
+                    intent.putExtra("instructions",station.getInstructions());
+                    intent.putExtra("key",station.getStationKey());
+
+                    context.startActivity(intent);
+                }
+            });
+
         }
 
 
@@ -166,9 +186,9 @@ public class StationListAdapter extends RecyclerView.Adapter<StationListAdapter.
     public void alert(Context context, final int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("Delete");
-        builder.setMessage("Delet this station?");
+        builder.setMessage("Delete this station?");
         final Context context1 = context;
-        builder.setPositiveButton("sure", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 
 
             @Override
@@ -229,5 +249,9 @@ public class StationListAdapter extends RecyclerView.Adapter<StationListAdapter.
     }
 
 
-}
 
+
+
+
+
+}

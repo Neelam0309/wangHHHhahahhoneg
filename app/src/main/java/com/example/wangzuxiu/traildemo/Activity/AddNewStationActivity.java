@@ -28,13 +28,26 @@ public class AddNewStationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         this.setTitle(R.string.title_new_station);
         setContentView(R.layout.activity_add_new_station);
+        Intent intent= getIntent();
+        int flag = intent.getIntExtra("flag",0);
 
         mDatabase = FirebaseDatabase.getInstance().getReference("/stations");
         // Use MapView mv_station_location to display the map
-
-        et_stationName = (EditText)findViewById(R.id.et_station_name) ;
-        et_stationLocation = (EditText)findViewById(R.id.tv_station_address) ;
+        et_stationName = (EditText) findViewById(R.id.et_station_name);
+        et_stationLocation = (EditText) findViewById(R.id.tv_station_address);
         et_instruction = (EditText) findViewById(R.id.et_station_instruction);
+
+        if(flag==0) {
+
+        }
+        else if(flag==1)
+        {
+            String stationName=intent.getStringExtra("stationName");
+
+            et_stationName.setText(intent.getStringExtra("stationName"));
+            et_stationLocation.setText(intent.getStringExtra("location"));
+            et_instruction.setText(intent.getStringExtra("instructions"));
+        }
 
         btnSave = (Button) findViewById(R.id.btn_save);
         btnSave.setOnClickListener(new View.OnClickListener() {
