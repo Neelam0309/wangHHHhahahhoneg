@@ -6,6 +6,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import com.example.wangzuxiu.traildemo.R;
+import com.example.wangzuxiu.traildemo.model.Post;
+import com.example.wangzuxiu.traildemo.model.User;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 
 
 /**
@@ -14,7 +23,8 @@ import com.example.wangzuxiu.traildemo.R;
 
 public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHolder>{
 
-    private String[][] myDataSet;
+    //private String[][] myDataSet;
+    private ArrayList<Post> myDataSet=new ArrayList<>();
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -30,7 +40,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
         }
     }
 
-    public PostListAdapter(String[][] postList) {
+    public PostListAdapter(ArrayList<Post> postList) {
         myDataSet = postList;
     }
 
@@ -43,18 +53,36 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(PostListAdapter.ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(final PostListAdapter.ViewHolder viewHolder, final int position) {
 
         // if user who posted == trainer, his name could be different color (if want to implement this)
 
-        viewHolder.tvPost.setText(myDataSet[position][0]);
-        viewHolder.tvUserName.setText(myDataSet[position][1]);
-        viewHolder.tvCreatedDate.setText(myDataSet[position][2]);
+        viewHolder.tvPost.setText(myDataSet.get(position).post);
+
+        String userId=myDataSet.get(position).userId;
+        DatabaseReference ref= FirebaseDatabase.getInstance().getReference("users");
+        ref.child(userId).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                User user=dataSnapshot.getValue(User.class);
+                String username=user.getUserName();
+                viewHolder.tvUserName.setText(username);
+
+            }
+
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        viewHolder.tvCreatedDate.setText(myDataSet.get(position).timestamp);
     }
 
     @Override
     public int getItemCount() {
-        return myDataSet.length;
+        return myDataSet.size();
     }
 
 

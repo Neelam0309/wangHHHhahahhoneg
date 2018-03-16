@@ -19,11 +19,13 @@ public class TabPagerAdapter extends FragmentStatePagerAdapter {
     int numOfTabs;
     int flag;
     String message;
+    String stationId;
 
-    public TabPagerAdapter(FragmentManager fm, int numOfTabs) {
+    public TabPagerAdapter(FragmentManager fm, int numOfTabs,String stationId) {
         super(fm);
         this.numOfTabs = numOfTabs;
         this.flag = 0;
+        this.stationId=stationId;
     }
 
     @Override
@@ -35,6 +37,9 @@ public class TabPagerAdapter extends FragmentStatePagerAdapter {
             case 1:
                 if (flag == 0) {
                     StationDiscussionFragment stationDiscussionFragment = new StationDiscussionFragment();
+                    Bundle bundle=new Bundle();
+                    bundle.putString("stationId",stationId);
+                    stationDiscussionFragment.setArguments(bundle);
                     return stationDiscussionFragment;
                 }
             default:

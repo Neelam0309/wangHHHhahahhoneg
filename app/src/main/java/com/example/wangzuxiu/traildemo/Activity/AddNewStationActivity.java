@@ -86,8 +86,6 @@ public class AddNewStationActivity extends AppCompatActivity {
 
     public void save()
     {
-
-
         String key = getTrailKey();
         String stationKey = mDatabase.child(key).push().getKey();
         System.out.println("station key"+stationKey);

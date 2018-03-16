@@ -27,13 +27,6 @@ public class StationPostFragment extends Fragment {
     private TextView tvCreatedDate;
     private EditText etNewPost;
     private ImageButton btnPost;
-    private String[] discussionThread = {"Welcome to ISS", "Zhang Peiyan", "2018-03-01"};
-    private String[][] postList = {
-            {"Omg", "Sriraj", "2018-03-02"}, {"Thank you", "Surbhi", "2018-03-03"},
-            {"Love it", "Wang Zuxiu", "2018-03-04"}, {"Wow", "Hong Weixiang", "2018-03-05"},
-            {"Wanna go", "Neelam", "2018-03-06"}};
-
-
     public StationPostFragment() {
         // Required empty public constructor
     }
@@ -48,9 +41,6 @@ public class StationPostFragment extends Fragment {
         tvUserName = (TextView) fragmentView.findViewById(R.id.tv_user_name);
         tvCreatedDate = (TextView) fragmentView.findViewById(R.id.tv_created_date);
 
-        tvDiscussionTopic.setText(discussionThread[0]);
-        tvUserName.setText(discussionThread[1]);
-        tvCreatedDate.setText(discussionThread[2]);
 
         rvPostList = (RecyclerView) fragmentView.findViewById(R.id.post_list);
         rvPostList.setHasFixedSize(false);
@@ -58,7 +48,7 @@ public class StationPostFragment extends Fragment {
         postListManager = new LinearLayoutManager(getActivity());
         rvPostList.setLayoutManager(postListManager);
 
-        postListAdapter = new PostListAdapter(postList);
+        //postListAdapter = new PostListAdapter(postList);
         rvPostList.setAdapter(postListAdapter);
 
         return fragmentView;

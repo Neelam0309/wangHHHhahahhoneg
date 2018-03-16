@@ -66,53 +66,7 @@ public class StationListAdapter extends RecyclerView.Adapter<StationListAdapter.
             btnprogress=v.findViewById(R.id.iv_uploaded);
 
             btnprogress.setVisibility(View.GONE);
-            if (! editable) {
-                // btnAdjust & btnDeleteStation is invisible now
-                v.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        // Launch StationDetailActivity
-                        Context context = v.getContext();
-                        Intent intent = new Intent(context, StationDetailActivity.class);
-                        intent.putExtra("stationName", tvStationName.getText().toString());
-                        intent.putExtra("stationKey", key);
-                        context.startActivity(intent);
-                    }
-                });
-            } else if (editable) {
-                // btnAdjust & btnDeleteStation is visible now
-                btnAdjustUp.setVisibility(View.VISIBLE);
-                btnAdjustDown.setVisibility(View.VISIBLE);
-                //btnDeleteStation.setVisibility(View.VISIBLE);
-                tvStationSequence.setVisibility(View.INVISIBLE);
-                ivUploaded.setVisibility(View.INVISIBLE);
 
-                final Context context = v.getContext();
-                // OnClick btnAdjust to change sequence (not implemented yet)
-                // OnClick btnDeleteStation to delete station
-               /*// btnDeleteStation.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        // should be a dialog to ensure delete or not
-
-                       // Toast.makeText(context, "delete learning station?", Toast.LENGTH_SHORT).show();
-
-                    }
-                });*/
-
-                // OnClick Item
-                v.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        // Launch EditStationActivity, can be revised title and setAutoFilled from AddNewTrailActivity (not implemented yet)
-                        Intent intent = new Intent(context, AddNewStationActivity.class);
-                        // intent.putExtra("stationName", tvStationName.getText().toString());
-                        context.startActivity(intent);
-                    }
-                });
-
-
-            }
 
         }
     }
@@ -175,6 +129,44 @@ public class StationListAdapter extends RecyclerView.Adapter<StationListAdapter.
                     context.startActivity(intent);
                 }
             });
+
+        }
+
+        if (! editable) {
+            // btnAdjust & btnDeleteStation is invisible now
+            viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Launch StationDetailActivity
+                    TextView tvStationName = (TextView) v.findViewById(R.id.tv_station_name);
+                    Context context = v.getContext();
+                    Intent intent = new Intent(context, StationDetailActivity.class);
+                    Station station=myDataSet.get(position);
+                    intent.putExtra("stationName", tvStationName.getText().toString());
+                    intent.putExtra("stationId",station.getStationKey());
+                    intent.putExtra("trailKey", key);
+                    context.startActivity(intent);
+                }
+            });
+        } else if (editable) {
+            // btnAdjust & btnDeleteStation is visible now
+
+//            btnAdjustUp.setVisibility(View.VISIBLE);
+//            btnAdjustDown.setVisibility(View.VISIBLE);
+//            //btnDeleteStation.setVisibility(View.VISIBLE);
+            //tvStationSequence.setVisibility(View.INVISIBLE);
+            //ivUploaded.setVisibility(View.INVISIBLE);
+
+            viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Launch EditStationActivity, can be revised title and setAutoFilled from AddNewTrailActivity (not implemented yet)
+                    Intent intent = new Intent(context, AddNewStationActivity.class);
+                    // intent.putExtra("stationName", tvStationName.getText().toString());
+                    context.startActivity(intent);
+                }
+            });
+
 
         }
 

@@ -30,6 +30,17 @@
         android:hint="Add a new discussion..."
         android:inputType="text" />
 
+    <TextView
+        android:id="@+id/tv_empty_discussion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center_horizontal"
+        android:text="There is no discussion here"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:visibility="gone" />
+
     <ImageButton
         android:id="@+id/btn_post"
         android:layout_width="wrap_content"
