@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.media.Image;
+import android.graphics.Color;
 import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -29,13 +29,14 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Created by mia on 04/03/18.
  */
 
 
-public class StationListAdapter extends RecyclerView.Adapter<StationListAdapter.ViewHolder> {
+public class StationListAdapter extends RecyclerView.Adapter<StationListAdapter.ViewHolder> implements ItemTouchHelperAdapter {
 
     private ArrayList<Station> myDataSet=new ArrayList<>();
     private boolean editable;
@@ -43,14 +44,46 @@ public class StationListAdapter extends RecyclerView.Adapter<StationListAdapter.
     private String key;
     private Station station;
     private Intent intent;
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    private  int position;
+    private final OnStartDragListener mDragStartListener;
+    private OnItemClickListener mItemClickListener;
+    @Override
+    public boolean onItemMove(int fromPosition, int toPosition) {
+        System.out.print("from:"+fromPosition+" to position"+toPosition);
+        if (fromPosition < myDataSet.size() && toPosition < myDataSet.size()) {
+            if (fromPosition < toPosition) {
+                for (int i = fromPosition; i < toPosition; i++) {
+                    Collections.swap(myDataSet, i, i + 1);
+                }
+            } else {
+                for (int i = fromPosition; i > toPosition; i--) {
+                    Collections.swap(myDataSet, i, i - 1);
+                }
+            }
+            notifyItemMoved(fromPosition, toPosition);
+        }
+        return true;
+    }
+
+    public void updateList(ArrayList<Station> list) {
+        myDataSet = list;
+        notifyDataSetChanged();
+
+    }
+
+    @Override
+    public void onItemDismiss(int position) {
+        myDataSet.remove(position);
+        notifyItemRemoved(position);
+    }
+
+    public  class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, ItemTouchHelperViewHolder {
         // each data item is just a string in this case
         private TextView tvStationName;
         private TextView tvStationSequence;
         private ImageView ivUploaded;
         private ImageButton btnAdjustUp;
         private ImageButton btnAdjustDown;
-        private ImageView btnprogress;
         private String key;
 
 
@@ -63,9 +96,9 @@ public class StationListAdapter extends RecyclerView.Adapter<StationListAdapter.
             btnAdjustUp = (ImageButton) v.findViewById(R.id.iv_up);
             btnAdjustDown = (ImageButton) v.findViewById(R.id.iv_down);
             this.key=key;
-            btnprogress=v.findViewById(R.id.iv_uploaded);
 
-            btnprogress.setVisibility(View.GONE);
+            System.out.println("position........."+this.getLayoutPosition());
+
             if (! editable) {
                 // btnAdjust & btnDeleteStation is invisible now
                 v.setOnClickListener(new View.OnClickListener() {
@@ -88,7 +121,7 @@ public class StationListAdapter extends RecyclerView.Adapter<StationListAdapter.
                 ivUploaded.setVisibility(View.INVISIBLE);
 
                 final Context context = v.getContext();
-
+             
 
                 // OnClick Item
                 v.setOnClickListener(new View.OnClickListener() {
@@ -105,12 +138,30 @@ public class StationListAdapter extends RecyclerView.Adapter<StationListAdapter.
             }
 
         }
+
+        @Override
+        public void onClick(View view) {
+            if (mItemClickListener != null) {
+                mItemClickListener.onItemClick(view, position);
+            }
+        }
+
+        @Override
+        public void onItemSelected() {
+            itemView.setBackgroundColor(Color.LTGRAY);
+        }
+
+        @Override
+        public void onItemClear() {
+            itemView.setBackgroundColor(0);
+        }
     }
 
-    public StationListAdapter(ArrayList<Station> stationList, boolean editable,String key) {
+    public StationListAdapter(ArrayList<Station> stationList, boolean editable, String key, OnStartDragListener dragListner) {
         myDataSet = stationList;
         this.editable = editable;
         this.key=key;
+        mDragStartListener = dragListner;
     }
 
     @Override
@@ -123,6 +174,8 @@ public class StationListAdapter extends RecyclerView.Adapter<StationListAdapter.
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
+
+        this.position=position;
         viewHolder.tvStationName.setText(myDataSet.get(position).getStationName());
         //viewHolder.tvStationSequence.setText(String.valueOf(position + 1) + ".");
         viewHolder.tvStationSequence.setText(String.valueOf(position+1));
@@ -133,7 +186,6 @@ public class StationListAdapter extends RecyclerView.Adapter<StationListAdapter.
         // Now just randomly pick the image according to position, should be implemented correctly
         // The image of "√" should be changed to a nicer picture, find it in Layout item_station_list
         Resources res = viewHolder.itemView.getContext().getResources();
-
         final Context context = viewHolder.itemView.getContext();
         if(editable) {
             btnDeleteStation = (ImageButton) viewHolder.itemView.findViewById(R.id.btn_delete_station);
@@ -158,6 +210,7 @@ public class StationListAdapter extends RecyclerView.Adapter<StationListAdapter.
                     intent.putExtra("flag",1);
                     intent.putExtra("stationName",station.getStationName());
                     intent.putExtra("location",station.getGps());
+                    System.out.println("location:"+station.getGps());
                     intent.putExtra("instructions",station.getInstructions());
                     intent.putExtra("stationKey",station.getStationKey());
                     intent.putExtra("key",key);
@@ -169,11 +222,11 @@ public class StationListAdapter extends RecyclerView.Adapter<StationListAdapter.
         }
 
 
-//        if (position % 2 == 0) {
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//                viewHolder.ivUploaded.setImageDrawable(res.getDrawable(android.R.drawable.checkbox_on_background, null));
-//            }
-//        }
+        if (position % 2 == 0) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                viewHolder.ivUploaded.setImageDrawable(res.getDrawable(android.R.drawable.checkbox_on_background, null));
+            }
+        }
 
     }
 
@@ -243,7 +296,13 @@ public class StationListAdapter extends RecyclerView.Adapter<StationListAdapter.
     }
 
 
+    public interface OnItemClickListener {
+        public void onItemClick(View view, int position);
+    }
 
+    public void setOnItemClickListener(final OnItemClickListener mItemClickListener) {
+        this.mItemClickListener = mItemClickListener;
+    }
 
 
 

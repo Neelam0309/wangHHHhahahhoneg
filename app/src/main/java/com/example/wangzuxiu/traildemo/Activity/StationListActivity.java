@@ -7,11 +7,14 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.example.wangzuxiu.traildemo.Adapter.EditItemTouchHelperCallback;
+import com.example.wangzuxiu.traildemo.Adapter.OnStartDragListener;
 import com.example.wangzuxiu.traildemo.Adapter.StationListAdapter;
 
 import com.example.wangzuxiu.traildemo.R;
@@ -32,9 +35,9 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class StationListActivity extends AppCompatActivity {
+public class StationListActivity extends AppCompatActivity implements OnStartDragListener{
     private RecyclerView rvStationList;
-    private RecyclerView.Adapter stationListAdapter;
+    private StationListAdapter stationListAdapter;
     private RecyclerView.LayoutManager stationListManager;
     private FloatingActionButton fabAddStation;
     private TextView tvEmptyStationList;
@@ -42,6 +45,8 @@ public class StationListActivity extends AppCompatActivity {
     private ArrayList<Station> stationList=new ArrayList<>();
     private String uid= FirebaseAuth.getInstance().getUid();
     private FirebaseAuth mAuth;
+    OnStartDragListener dragListner;
+    ItemTouchHelper mItemTouchHelper;
     String key;
     Intent intent;
     // private String[] stationList = {"ISS Level 1", "ISS Level 2",
@@ -80,8 +85,15 @@ public class StationListActivity extends AppCompatActivity {
                     stationList.add(station);
                 }
                 key = intent.getStringExtra("key");
-                stationListAdapter = new StationListAdapter(stationList,false,key);
+                stationListAdapter = new StationListAdapter(stationList,false,key,dragListner);
                 rvStationList.setAdapter(stationListAdapter);
+
+
+                rvStationList.setAdapter(stationListAdapter);
+                ItemTouchHelper.Callback callback = new EditItemTouchHelperCallback(stationListAdapter);
+
+                mItemTouchHelper = new ItemTouchHelper(callback);
+                mItemTouchHelper.attachToRecyclerView(rvStationList);
 
                 System.out.println(stationList);
                 // For Participant Mode, text of tvEmptyTrailList should be changed
@@ -95,6 +107,9 @@ public class StationListActivity extends AppCompatActivity {
 
             }
         });
+
+
+
 
 
 
@@ -114,7 +129,10 @@ public class StationListActivity extends AppCompatActivity {
         // When trainer click the menu - Edit, the trailListAdapter should be changed to EditableTrailListAdapter
         // Not implemented yet
     }
-
+    @Override
+    public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
+        mItemTouchHelper.startDrag(viewHolder);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -132,14 +150,14 @@ public class StationListActivity extends AppCompatActivity {
             signOut();
 
         } else if (i == R.id.action_edit) {
-            Intent intent = new Intent(StationListActivity.this,EditStationActivity.class);
-            intent.putExtra("key",key);
+            Intent intent = new Intent(StationListActivity.this, EditStationActivity.class);
+            intent.putExtra("key", key);
             startActivity(intent);
-            //   mDatabase = FirebaseDatabase.getInstance().getReference("stations");
-
         }
         return true;
+
     }
+
     private void signOut() {
         // Firebase sign out
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
