@@ -13,11 +13,8 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.wangzuxiu.traildemo.Adapter.ParticipantStationListAdapter;
-import com.example.wangzuxiu.traildemo.Adapter.StationListAdapter;
-
 import com.example.wangzuxiu.traildemo.R;
 import com.example.wangzuxiu.traildemo.model.Station;
-
 import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;

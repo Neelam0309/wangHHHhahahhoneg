@@ -14,7 +14,6 @@ import android.widget.TextView;
 import com.example.wangzuxiu.traildemo.Adapter.DiscussionListAdapter;
 import com.example.wangzuxiu.traildemo.R;
 import com.example.wangzuxiu.traildemo.model.Discussion;
-import com.example.wangzuxiu.traildemo.model.Trail;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;

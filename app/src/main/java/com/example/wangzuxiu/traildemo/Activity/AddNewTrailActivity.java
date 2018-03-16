@@ -1,29 +1,21 @@
 package com.example.wangzuxiu.traildemo.Activity;
 
 
-
-import com.example.wangzuxiu.traildemo.R;
-
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.TextView;
 
+import com.example.wangzuxiu.traildemo.R;
 import com.example.wangzuxiu.traildemo.model.Trail;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -48,7 +40,7 @@ public class AddNewTrailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.setTitle("new_trail");
+        this.setTitle("Add new learning trail");
         setContentView(R.layout.activity_add_new_trail);
 
         // Could use DatePicker to choose the date
@@ -60,16 +52,16 @@ public class AddNewTrailActivity extends AppCompatActivity {
 
         if(flag==0){  //add new trail
 
-            date=new Date(System.currentTimeMillis());
+   /*         date=new Date(System.currentTimeMillis());
             et_trail_date=formatter.format(date); //timestamp
-            tv_date.setText(formatter_date.format(selectedDate.getTime()));
+            tv_date.setText(formatter_date.format(selectedDate.getTime()));*/
         }
 
         else if (flag==1){  //edit a trail
             trailName=intent.getStringExtra("trailName");
             trailDate=intent.getStringExtra("trailDate");
             timestamp=intent.getStringExtra("timestamp");
-            et_trail_date=timestamp;
+            et_trail_date=trailDate;
 
             tv_name.setText(trailName);
             tv_date.setText(trailDate);

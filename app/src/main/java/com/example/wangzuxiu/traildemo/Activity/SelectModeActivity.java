@@ -53,7 +53,7 @@ public class SelectModeActivity extends AppCompatActivity implements View.OnClic
         button.setOnClickListener(this);
 
         spinner=findViewById(R.id.spinner);
-        ArrayAdapter<String> adapter =new ArrayAdapter<String>(this,R.layout.simple_spinner_item,mode);
+        ArrayAdapter<String> adapter =new ArrayAdapter<String>(this, R.layout.simple_spinner_item,mode);
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override

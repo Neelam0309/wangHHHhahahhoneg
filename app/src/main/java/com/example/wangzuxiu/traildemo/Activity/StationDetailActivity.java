@@ -18,14 +18,14 @@ public class StationDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
         String stationName = intent.getStringExtra("stationName");
+        String trailKey = intent.getStringExtra("trailKey");
         this.setTitle(stationName);
         setContentView(R.layout.activity_station_detail);
 
         String stationId=intent.getStringExtra("stationId");
 
-
         final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
-        TabPagerAdapter pagerAdapter = new TabPagerAdapter(getSupportFragmentManager(), 3,stationId);
+        TabPagerAdapter pagerAdapter = new TabPagerAdapter(getSupportFragmentManager(), 3 ,trailKey,stationId);
         viewPager.setAdapter(pagerAdapter);
 
         final TabLayout tabLayout = (TabLayout) findViewById(R.id.tab);

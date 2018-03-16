@@ -1,6 +1,5 @@
 package com.example.wangzuxiu.traildemo.Activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -8,11 +7,14 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.example.wangzuxiu.traildemo.Adapter.EditItemTouchHelperCallback;
+import com.example.wangzuxiu.traildemo.Adapter.OnStartDragListener;
 import com.example.wangzuxiu.traildemo.Adapter.StationListAdapter;
 import com.example.wangzuxiu.traildemo.R;
 import com.example.wangzuxiu.traildemo.model.Station;
@@ -35,11 +37,11 @@ import java.util.ArrayList;
  * Created by Neelam on 3/15/2018.
  */
 
-public class EditStationActivity extends AppCompatActivity {
+public class EditStationActivity extends AppCompatActivity implements OnStartDragListener {
 
 
     private RecyclerView rvStationList;
-    private RecyclerView.Adapter stationListAdapter;
+    private StationListAdapter stationListAdapter;
     private RecyclerView.LayoutManager stationListManager;
     private FloatingActionButton fabAddStation;
     private TextView tvEmptyTrailList;
@@ -48,7 +50,8 @@ public class EditStationActivity extends AppCompatActivity {
     private String uid= FirebaseAuth.getInstance().getUid();
     private FirebaseAuth mAuth;
     private Intent intent;
-
+    private OnStartDragListener dragListner;
+    private ItemTouchHelper mItemTouchHelper;
 
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -75,8 +78,13 @@ public class EditStationActivity extends AppCompatActivity {
                     Station station=child.getValue(Station.class);
                     stationList.add(station);
                 }
-                stationListAdapter = new StationListAdapter(stationList,true,key);
+                stationListAdapter = new StationListAdapter(stationList,true,key,null);
                 rvStationList.setAdapter(stationListAdapter);
+
+                ItemTouchHelper.Callback callback = new EditItemTouchHelperCallback(stationListAdapter);
+
+                mItemTouchHelper = new ItemTouchHelper(callback);
+                mItemTouchHelper.attachToRecyclerView(rvStationList);
 
                 tvEmptyTrailList = findViewById(R.id.tv_empty_station_list);
                 // For Participant Mode, text of tvEmptyTrailList should be changed
@@ -102,6 +110,7 @@ public class EditStationActivity extends AppCompatActivity {
             public void onClick(View v) {
                 int flag=0;
                 Intent intent=new Intent(EditStationActivity.this,AddNewStationActivity.class);
+                intent.putExtra("key",key);
                 intent.putExtra("flag",0);
                 startActivity(intent);
             }
@@ -149,5 +158,10 @@ public class EditStationActivity extends AppCompatActivity {
         LoginManager.getInstance().logOut();  //facebook log out
 
         startActivity(new Intent(EditStationActivity.this, MainActivity.class));
+    }
+
+    @Override
+    public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
+        mItemTouchHelper.startDrag(viewHolder);
     }
 }

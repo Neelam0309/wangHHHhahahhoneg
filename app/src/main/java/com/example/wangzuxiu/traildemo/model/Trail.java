@@ -1,6 +1,5 @@
 package com.example.wangzuxiu.traildemo.model;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 

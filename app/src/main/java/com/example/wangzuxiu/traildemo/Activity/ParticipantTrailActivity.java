@@ -13,7 +13,6 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.wangzuxiu.traildemo.Adapter.ParticipantTrailListAdapter;
-import com.example.wangzuxiu.traildemo.Adapter.TrailListAdapter;
 import com.example.wangzuxiu.traildemo.R;
 import com.example.wangzuxiu.traildemo.model.Trail;
 import com.facebook.login.LoginManager;

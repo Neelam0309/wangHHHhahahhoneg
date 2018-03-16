@@ -1,6 +1,5 @@
 package com.example.wangzuxiu.traildemo.model;
 
-import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
 

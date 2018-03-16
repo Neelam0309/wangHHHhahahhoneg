@@ -1,31 +1,20 @@
 package com.example.wangzuxiu.traildemo.Adapter;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Build;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.wangzuxiu.traildemo.Activity.AddNewStationActivity;
 import com.example.wangzuxiu.traildemo.Activity.StationDetailActivity;
 import com.example.wangzuxiu.traildemo.R;
 import com.example.wangzuxiu.traildemo.model.Station;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -72,7 +61,7 @@ public class ParticipantStationListAdapter extends RecyclerView.Adapter<Particip
                         Context context = v.getContext();
                         Intent intent = new Intent(context, StationDetailActivity.class);
                         intent.putExtra("stationName", tvStationName.getText().toString());
-                        intent.putExtra("stationKey", key);
+                        intent.putExtra("trailKey", key);
                         context.startActivity(intent);
                     }
                 });
@@ -81,7 +70,7 @@ public class ParticipantStationListAdapter extends RecyclerView.Adapter<Particip
         }
     }
 
-    public ParticipantStationListAdapter(ArrayList<Station> stationList, boolean editable,String key) {
+    public ParticipantStationListAdapter(ArrayList<Station> stationList, boolean editable, String key) {
         myDataSet = stationList;
         this.editable = editable;
         this.key=key;

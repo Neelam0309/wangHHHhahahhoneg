@@ -12,11 +12,9 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.wangzuxiu.traildemo.Adapter.PostListAdapter;
-import com.example.wangzuxiu.traildemo.Adapter.TrailListAdapter;
 import com.example.wangzuxiu.traildemo.R;
 import com.example.wangzuxiu.traildemo.model.Discussion;
 import com.example.wangzuxiu.traildemo.model.Post;
-import com.example.wangzuxiu.traildemo.model.Trail;
 import com.example.wangzuxiu.traildemo.model.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;

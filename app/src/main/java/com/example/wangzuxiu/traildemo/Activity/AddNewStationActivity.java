@@ -13,25 +13,25 @@ import com.example.wangzuxiu.traildemo.model.Station;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class AddNewStationActivity extends AppCompatActivity {
     private Button btnSave;
     private EditText et_stationName;
     private EditText et_stationLocation;
     private EditText et_instruction;
     private DatabaseReference mDatabase;
+    int flag;
+    String stationName,location,instructions;
+    Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setTitle(R.string.title_new_station);
         setContentView(R.layout.activity_add_new_station);
-        Intent intent= getIntent();
-        int flag = intent.getIntExtra("flag",0);
+        intent= getIntent();
+        flag = intent.getIntExtra("flag",0);
 
-        mDatabase = FirebaseDatabase.getInstance().getReference("/stations");
+        mDatabase = FirebaseDatabase.getInstance().getReference();
         // Use MapView mv_station_location to display the map
         et_stationName = (EditText) findViewById(R.id.et_station_name);
         et_stationLocation = (EditText) findViewById(R.id.tv_station_address);
@@ -42,11 +42,12 @@ public class AddNewStationActivity extends AppCompatActivity {
         }
         else if(flag==1)
         {
-            String stationName=intent.getStringExtra("stationName");
-
-            et_stationName.setText(intent.getStringExtra("stationName"));
-            et_stationLocation.setText(intent.getStringExtra("location"));
-            et_instruction.setText(intent.getStringExtra("instructions"));
+            stationName=intent.getStringExtra("stationName");
+            location = intent.getStringExtra("location");
+            instructions= intent.getStringExtra("instructions");
+            et_stationName.setText(stationName);
+            et_stationLocation.setText(location);
+            et_instruction.setText(instructions);
         }
 
         btnSave = (Button) findViewById(R.id.btn_save);
@@ -86,15 +87,26 @@ public class AddNewStationActivity extends AppCompatActivity {
 
     public void save()
     {
-        String key = getTrailKey();
-        String stationKey = mDatabase.child(key).push().getKey();
-        System.out.println("station key"+stationKey);
-        Station station = new Station(et_stationName.getText().toString(),et_stationLocation.getText().toString(),et_instruction.getText().toString(),stationKey);
-        mDatabase.child(key).child(stationKey).setValue(station);
-        /*Map<String,Object> childUpdates=new HashMap<>();
-        Map<String,Object> trailList=station.toMap();
-        childUpdates.put("/stations/"+trailID,trailList);*/
-        //mDatabase.updateChildren(childUpdates);
+
+        if(flag==0) {
+            String key = getTrailKey();
+            String stationKey = mDatabase.child(key).push().getKey();
+            System.out.println("station key" + stationKey);
+            final Station station = new Station(et_stationName.getText().toString(), et_stationLocation.getText().toString(), et_instruction.getText().toString(), stationKey);
+            System.out.println("Station................"+station.getStationName());
+            mDatabase.child("stations/"+key).child(stationKey).setValue(station);
+
+
+        }
+        if(flag==1)
+        {
+            String key = getTrailKey();
+            String stationKey = intent.getStringExtra("stationKey");
+            final Station station = new Station(et_stationName.getText().toString(),
+                    et_stationLocation.getText().toString(),et_instruction.getText().toString(),stationKey);
+            System.out.println("Station................"+station.getStationName());
+            mDatabase.child("stations/"+key).child(stationKey).setValue(station);
+        }
     }
 
     public String getTrailKey() {

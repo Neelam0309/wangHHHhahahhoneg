@@ -19,12 +19,14 @@ public class TabPagerAdapter extends FragmentStatePagerAdapter {
     int numOfTabs;
     int flag;
     String message;
+    String trailKey;
     String stationId;
 
-    public TabPagerAdapter(FragmentManager fm, int numOfTabs,String stationId) {
+    public TabPagerAdapter(FragmentManager fm, int numOfTabs, String trailKey,String stationId) {
         super(fm);
         this.numOfTabs = numOfTabs;
         this.flag = 0;
+        this.trailKey=trailKey;
         this.stationId=stationId;
     }
 
@@ -33,11 +35,14 @@ public class TabPagerAdapter extends FragmentStatePagerAdapter {
         switch (position) {
             case 0:
                 StationInfoFragment stationInfoFragment = new StationInfoFragment();
+                Bundle bundle=new Bundle();
+                bundle.putString("trailKey",trailKey);
+                stationInfoFragment.setArguments(bundle);
                 return stationInfoFragment;
             case 1:
                 if (flag == 0) {
                     StationDiscussionFragment stationDiscussionFragment = new StationDiscussionFragment();
-                    Bundle bundle=new Bundle();
+                    bundle = new Bundle();
                     bundle.putString("stationId",stationId);
                     stationDiscussionFragment.setArguments(bundle);
                     return stationDiscussionFragment;
