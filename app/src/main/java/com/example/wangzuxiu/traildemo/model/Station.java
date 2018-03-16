@@ -47,13 +47,5 @@ public class Station {
         return stationKey;
     }
 
-    public Map<String, Object> toMap() {
-        HashMap<String, Object> result = new HashMap<>();
-        //result.put("userId", userId);
-        result.put("stationName", stationName);
-        result.put("gps",gps);
-        result.put("instructions", instructions);
-        result.put("stationKey",stationKey);
-        return result;
-    }
+
 }

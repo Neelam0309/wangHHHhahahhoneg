@@ -102,6 +102,7 @@ public class EditStationActivity extends AppCompatActivity {
             public void onClick(View v) {
                 int flag=0;
                 Intent intent=new Intent(EditStationActivity.this,AddNewStationActivity.class);
+                intent.putExtra("key",key);
                 intent.putExtra("flag",0);
                 startActivity(intent);
             }

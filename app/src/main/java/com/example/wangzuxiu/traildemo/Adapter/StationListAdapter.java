@@ -88,17 +88,7 @@ public class StationListAdapter extends RecyclerView.Adapter<StationListAdapter.
                 ivUploaded.setVisibility(View.INVISIBLE);
 
                 final Context context = v.getContext();
-                // OnClick btnAdjust to change sequence (not implemented yet)
-                // OnClick btnDeleteStation to delete station
-               /*// btnDeleteStation.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        // should be a dialog to ensure delete or not
 
-                       // Toast.makeText(context, "delete learning station?", Toast.LENGTH_SHORT).show();
-
-                    }
-                });*/
 
                 // OnClick Item
                 v.setOnClickListener(new View.OnClickListener() {
@@ -168,9 +158,9 @@ public class StationListAdapter extends RecyclerView.Adapter<StationListAdapter.
                     intent.putExtra("flag",1);
                     intent.putExtra("stationName",station.getStationName());
                     intent.putExtra("location",station.getGps());
-                    System.out.println("location:"+station.getGps());
                     intent.putExtra("instructions",station.getInstructions());
-                    intent.putExtra("key",station.getStationKey());
+                    intent.putExtra("stationKey",station.getStationKey());
+                    intent.putExtra("key",key);
 
                     context.startActivity(intent);
                 }
